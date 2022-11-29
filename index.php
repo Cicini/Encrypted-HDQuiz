@@ -212,7 +212,7 @@ function hdq_validate_answers()
 		
 		$a = $d["answer"];
 		if($a !== ""){
-			if(preg_match("/[a-z]/i", $a)){
+			if(!is_numeric($a)){
 				$a = sanitize_text_field($a);
 			} else {
 				$a = intval($a) + 1;
