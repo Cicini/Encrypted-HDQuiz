@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('HDQ_PLUGIN_VERSION')) {
-    define('HDQ_PLUGIN_VERSION', '2022.11.21');
+    define('HDQ_PLUGIN_VERSION', '2023.01.29');
 }
 
 // custom quiz image sizes
@@ -275,3 +275,21 @@ function hdq_validate_answers()
 }
 add_action('wp_ajax_hdq_validate_answers', 'hdq_validate_answers');
 add_action('wp_ajax_nopriv_hdq_validate_answers', 'hdq_validate_answers');
+function hdq_get_result_text()
+{
+	$quiz_ID = intval($_POST["data"]["quiz_ID"]);
+	$status = sanitize_text_field($_POST["data"]["status"]);	
+	
+	$quiz_settings = get_hdq_quiz($quiz_ID);
+    $pass_text = $quiz_settings["quiz_pass_text"]["value"];
+    $fail_text = $quiz_settings["quiz_fail_text"]["value"];
+	
+	if($status === "pass"){
+		echo $pass_text;
+	} else {
+		echo $fail_text;
+	}
+	die();
+}
+add_action('wp_ajax_hdq_get_result_text', 'hdq_get_result_text');
+add_action('wp_ajax_nopriv_hdq_get_result_text', 'hdq_get_result_text');
