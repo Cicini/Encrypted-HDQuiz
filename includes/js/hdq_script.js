@@ -705,9 +705,33 @@ const HDQ = {
 			pass_percent = score[0] / score[1];
 			pass_percent = pass_percent * 100;
 			if (pass_percent >= HDQ.VARS.pass_percent) {
-				jQuery(".hdq_result_pass").show();
+				jQuery.ajax({
+					type: "POST",
+					data: {
+						action: "hdq_get_result_text",
+						data: { quiz_ID: quiz_ID, status: "pass" },
+					},
+					url: HDQ.VARS.ajax,
+					success: async function (res) {
+						console.log(res);
+						jQuery(".hdq_result_pass").html(res);
+						jQuery(".hdq_result_pass").show();
+					},
+				});
 			} else {
-				jQuery(".hdq_result_fail").show();
+				jQuery.ajax({
+					type: "POST",
+					data: {
+						action: "hdq_get_result_text",
+						data: { quiz_ID: quiz_ID, status: "fail" },
+					},
+					url: HDQ.VARS.ajax,
+					success: async function (res) {
+						console.log(res);
+						jQuery(".hdq_result_fail").html(res);
+						jQuery(".hdq_result_fail").show();
+					},
+				});
 			}
 
 			if (HDQ.VARS.share_results === "yes") {
