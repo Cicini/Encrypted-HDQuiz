@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('HDQ_PLUGIN_VERSION')) {
-    define('HDQ_PLUGIN_VERSION', '2023.01.29');
+    define('HDQ_PLUGIN_VERSION', '2023.04.06');
 }
 
 // custom quiz image sizes
