@@ -186,7 +186,7 @@ function hdq_check_for_updates()
         $data = array("", "");
     }
 
-    $remote = wp_remote_get("https://harmonicdesign.ca/plugins/hd-quiz/addons.txt");
+    $remote = wp_remote_get("https://raw.githubusercontent.com/Cicini/Encrypted-HDQuiz/main/addons.txt");
     if (is_array($remote)) {
         $remote = sanitize_text_field($remote["body"]);
         if ($remote > $data[1]) {
