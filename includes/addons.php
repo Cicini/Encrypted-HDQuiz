@@ -22,7 +22,8 @@ wp_enqueue_script(
 );
 
 $today = date("Ymd");
-update_option("hdq_new_addon", array("no", $today)); // reset since we have seen it now
+update_option("hdq_new_addon", $today);
+set_transient("hdq_new_addon", array("date" => $today, "isNew" => ""), WEEK_IN_SECONDS);
 ?>
 
 
@@ -33,20 +34,11 @@ update_option("hdq_new_addon", array("no", $today)); // reset since we have seen
         </h1>
     </div>
 
-
-
-    <p>
-        If you are a developer and would like to include your addon plugin to this page, please message me <a href="https://harmonicdesign.ca/submit-a-plugin?utm_source=HDQuiz&utm_medium=addonsPage">here</a>, or <a href="https://harmonicdesign.ca/hd-quiz-addons?utm_source=HDQuiz&utm_medium=addonsPage">click here</a> to learn how to create your own addons.
-    </p>
-    <p>
-        Plugins marked as "verified" are plugins that have either been developed by <a href="https://harmonicdesign.ca?utm_source=HDQuiz&utm_medium=addonsPage">Harmonic Design</a>, or have been audited and approved by Harmonic Design.
-    </p>
-
     <div id="hdq_addons">
         <?php
 
         // TODO! convert to ajax for faster initial page load
-        $data = wp_remote_get("https://harmonicdesign.ca/addons/json/");
+        $data = wp_remote_get("https://hdplugins.com/plugins/hd-quiz/addons.txt");
 
         if (is_array($data)) {
             $data = $data["body"];
@@ -69,6 +61,8 @@ update_option("hdq_new_addon", array("no", $today)); // reset since we have seen
                     }
                     if ($price == 0) {
                         $price = "FREE";
+                    } else {
+                        $price = "$" . $price;
                     }
                     if ($subscription != "") {
                         $price = $price . ' / ' . $subscription;
@@ -84,7 +78,7 @@ update_option("hdq_new_addon", array("no", $today)); // reset since we have seen
                                 <?php
                                 echo $title;
                                 if ($verified == "verified") {
-                                    echo '<span class = "hdq_verified hdq_tooltip hdq_tooltip_question">verified<span class="hdq_tooltip_content"><span>This plugin has either been developed by the author of HD Quiz or has been audited by the developer.<br/><small>please note that Harmonic Design cannot guarantee that third party plugins for HD Quiz are risk free and secure after verification.</small></span></span></span>';
+                                    echo '<span class = "hdq_verified hdq_tooltip hdq_tooltip_question">verified<span class="hdq_tooltip_content"><span>This plugin has either been developed by the author of HD Quiz or has been audited by the developer.</span></span></span>';
                                 } ?> <span class="hdq_price"><?php echo esc_html($price); ?></span></h2>
                             <h4 class="hdq_addon_author">
                                 developed by: <?php echo esc_html($author); ?>
@@ -106,12 +100,12 @@ update_option("hdq_new_addon", array("no", $today)); // reset since we have seen
             } else {
                 ?>
 
-                <p>Addons will appear here once available. There are currently two addons that are complete and have been submitted to the WordPress plugin team for review. They will appear here once verified. Please check back soon as both of these addons will be FREE!</p>
+                <p>Unable to retrieve list of addons. I'm probably having some server issues, please check back later.</p>
 
         <?php
             }
         } else {
-            echo '<h2>There was an error loading the available addons. Please refresh this page to try again.</h2>';
+            echo '<p>Unable to retrieve list of addons. I am probably having some server issues, please check back later.</p>';
         }
         ?>
 

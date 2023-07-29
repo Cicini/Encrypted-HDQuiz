@@ -1,4 +1,3 @@
-console.log("HD Quiz 1.8.7 Loaded");
 const HDQ = {
 	EL: {
 		quizzes: document.getElementsByClassName("hdq_quiz"),
@@ -12,7 +11,7 @@ const HDQ = {
 	},
 	VARS: {},
 	init: async function () {
-		console.log("HD Quiz Init");
+		console.log("Encrypted-HDQuiz 2023.07.29 Loaded");
 		if (HDQ.EL.quizzes.length > 1) {
 			for (let i = 0; i < HDQ.EL.quizzes.length; i++) {
 				let html = `<p>HD QUIZ - WARNING: There is more than one quiz on this page. Due to the complexity of HD Quiz, only one quiz should on a page at a time.</p>`;
@@ -70,6 +69,12 @@ const HDQ = {
 			}
 		}
 
+		if (!HDQ.VARS.legacy_scroll) {
+			// create hidden div above quiz that we can use to offset scrolling
+			const offsetDiv = `<div id = "hdq_offset_div" style = "width: 1px; height: 1px; position: relative; opactity: 0; pointer-events: none; user-select: none;z-index: 0; relative; top: -4rem; background-color:red">&nbsp;</div>`;
+			document.getElementById("hdq_" + HDQ.VARS.id).insertAdjacentHTML("afterbegin", offsetDiv);
+		}
+
 		let init_actions = HDQ.VARS.init_actions;
 		if (typeof init_actions != "undefined" && init_actions != null) {
 			for (let i = 0; i < init_actions.length; i++) {
@@ -93,10 +98,18 @@ const HDQ = {
 		init: function () {
 			try {
 				this.remove();
-				let results_wrapper = document.getElementsByClassName("hdq_results_wrapper")[0];
-				let next_el = results_wrapper.nextSibling.nextSibling;
-				if (next_el.classList.contains("hdq_jPaginate")) {
-					next_el.getElementsByClassName("hdq_next_button")[0].click();
+				let hdquiz_wrapper = document.getElementsByClassName("hdq_quiz")[0];
+
+				if (hdquiz_wrapper.firstElementChild.classList.contains("hdq_results_wrapper")) {
+					// results above
+					let results_wrapper = hdquiz_wrapper.firstElementChild;
+					let next_el = results_wrapper.nextSibling.nextSibling;
+					if (next_el.classList.contains("hdq_jPaginate")) {
+						next_el.getElementsByClassName("hdq_next_button")[0].click();
+					}
+				} else {
+					// results below
+					hdquiz_wrapper.firstElementChild.getElementsByClassName("hdq_next_button")[0].click();
 				}
 			} catch (e) {}
 			let quizzes = document.getElementsByClassName("hdq_quiz");
@@ -880,7 +893,8 @@ const HDQ = {
 		}
 		setTimeout(function () {
 			if (!HDQ.VARS.legacy_scroll) {
-				results_wrapper[0].scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+				// results_wrapper[0].scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+				document.getElementById("hdq_offset_div").scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 			} else {
 				HDQ.scroll_legacy.question();
 			}
@@ -967,7 +981,7 @@ const HDQ = {
 				hdq_quiz_container = jQuery(await HDQ.get_quiz_parent_container(hdq_quiz_container));
 
 				if (hdq_quiz_container[0].tagName === "DIV") {
-					hdq_top = jQuery(hdq_quiz_container).scrollTop() + jQuery(".hdq_question:visible").offset().top - jQuery(".hdq_question:visible").height() / 2 - 40;
+					hdq_top = jQuery(hdq_quiz_container).scrollTop() + jQuery(".hdq_question:visible").offset().top - jQuery(".hdq_question:visible").height() / 2 - 100;
 					jQuery(hdq_quiz_container).animate(
 						{
 							scrollTop: hdq_top,
@@ -986,7 +1000,7 @@ const HDQ = {
 
 					jQuery("html,body").animate(
 						{
-							scrollTop: jQuery(".hdq_question:visible").offset().top - 40,
+							scrollTop: jQuery(".hdq_question:visible").offset().top - 100,
 						},
 						550
 					);
@@ -1002,12 +1016,16 @@ const HDQ = {
 		},
 	},
 	scroll: function () {
-		const results_wrapper = document.getElementsByClassName("hdq_results_wrapper")[0];
 		setTimeout(function () {
-			results_wrapper.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+			if (HDQ.VARS.results_position === "above" && !HDQ.VARS.legacy_scroll) {
+				document.getElementById("hdq_offset_div").scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+			} else {
+				const results_wrapper = document.getElementsByClassName("hdq_results_wrapper")[0];
+				results_wrapper.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+			}
 		}, 300);
 	},
-	// gets find the parent question of an element
+	// gets the parent question of an element
 	getParent: async function (el) {
 		let p = el.parentNode;
 		if (p.classList.contains("hdq_question")) {
@@ -1038,6 +1056,7 @@ if (typeof hdq_local_vars != "undefined") {
 				show_extra_text: hdq_locals.hdq_show_extra_text,
 				show_results: hdq_locals.hdq_show_results,
 				show_results_now: hdq_locals.hdq_show_results_now,
+				results_position: hdq_locals.hdq_results_position,
 				stop_reselect: hdq_locals.hdq_stop_answer_reselect,
 				submit_actions: hdq_locals.hdq_submit,
 				init_actions: hdq_locals.hdq_init,
@@ -1077,3 +1096,4 @@ jQuery("#hdq_fb_sharer").on("click", function () {
 		}
 	);
 });
+

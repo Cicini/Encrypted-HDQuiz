@@ -96,7 +96,7 @@ if ($buildQuiz === true) {
     $use_adcode = false;
     $hdq_adcode = hdq_decode(hdq_decode($hdq_settings["hd_qu_adcode"]["value"]));
     if ($hdq_adcode != "" && $hdq_adcode != null) {
-        $hdq_adcode = stripcslashes(urldecode($hdq_adcode));
+        $hdq_adcode = apply_filters("the_content", stripcslashes(urldecode($hdq_adcode)));
         $use_adcode = true;
     }
 
@@ -135,6 +135,12 @@ if ($buildQuiz === true) {
         $results = $hdq_settings["hd_qu_results"]["value"];
     }
 
+    $resultsPos = "Above";
+    if (!isset($quiz_settings["results_position"]) || $quiz_settings["results_position"]["value"] !== "") {
+        $resultsPos = $quiz_settings["results_position"]["value"];
+    }
+
+
     $translations = array(
         "finish" => $finish,
         "next" => $next,
@@ -165,6 +171,7 @@ if ($buildQuiz === true) {
     $hdq_local_vars->hdq_submit = array();
     $hdq_local_vars->hdq_init = array();
     $hdq_local_vars->hdq_translations = $translations;
+    $hdq_local_vars->hdq_results_position = $resultsPos;
     $hdq_local_vars->hdq_share_text = $hdq_settings["hd_qu_share_text"]["value"];
     do_action("hdq_submit", $hdq_local_vars); // add functions to quiz complete
     do_action("hdq_init", $hdq_local_vars); // add functions to quiz init

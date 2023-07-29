@@ -26,11 +26,6 @@ function hdq_register_tools_page_callbak()
     require dirname(__FILE__) . '/tools.php';
 }
 
-function hdq_register_triviadb_page_callback()
-{
-    require dirname(__FILE__) . '/triviadb.php';
-}
-
 // Get image ID (for *super* old HD Quiz users image as answer)
 // taken from https://wpscholar.com/blog/get-attachment-id-from-wp-image-url/
 // great work Micah! This is super elegant
@@ -523,13 +518,11 @@ function hdq_get_results($quiz_settings)
     $results_percent = $settings["hd_qu_percent"]["value"][0]; ?>
 
     <div class="hdq_results_wrapper">
-        <div class="hdq_results_inner">
+        <div class="hdq_results_inner" aria-live = "polite">
             <h2 class="hdq_results_title"><?php echo $result_text; ?></h2>
             <div class="hdq_result"><?php if ($results_percent == "yes") {
                                         echo ' - <span class = "hdq_result_percent"></span>';
                                     } ?></div>
-            <div class="hdq_result_pass"></div>
-            <div class="hdq_result_fail"></div>
             <?php
             if ($share_results === "yes") {
             ?>
@@ -738,6 +731,9 @@ function hdq_print_finish($hdq_id, $jPaginate)
     } else {
         $jPaginate = "";
     }
+
+    do_action("hdq_before_finish_button", $hdq_id);
+
     echo '<div class = "hdq_finish"><div class = "hdq_finsh_button hdq_button ' . $jPaginate . '" data-id = "' . $hdq_id . '" role = "button" tabindex = "0">' . $finish_text . '</div></div>';
 }
 

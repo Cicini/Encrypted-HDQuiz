@@ -5,18 +5,15 @@
     * Plugin URI: https://github.com/cicini/encrypted-hdquiz
     * Author: Cicini (Original Version: Harmonic Design)
     * Author URI: https://github.com/cicini
-    * Version: 2022.11.21
+    * Version: 2023.07.29
 */
-
-// Want to change the new admin question pagination per-page?
-// add `define("HDQ_PER_PAGE", 200);` to your theme's functions.php (set 200 to your desired number)
 
 if (!defined('ABSPATH')) {
     die('Invalid request.');
 }
 
 if (!defined('HDQ_PLUGIN_VERSION')) {
-    define('HDQ_PLUGIN_VERSION', '2023.04.06');
+    define('HDQ_PLUGIN_VERSION', '2023.07.29');
 }
 
 // custom quiz image sizes
@@ -143,10 +140,12 @@ function hdq_create_settings_page()
         function hdq_register_settings_page()
         {
             $addon_text = "";
-            $new_addon = get_option("hdq_new_addon");
-            if ($new_addon != null && $new_addon != "") {
-                $new_addon = array_map("sanitize_text_field", $new_addon);
-                if ($new_addon[0] === "yes") {
+            $new_addon = get_transient("hdq_new_addon");
+            if ($new_addon === false) {
+                hdq_check_for_updates();
+            } else {
+                $new_addon["isNew"] = sanitize_text_field($new_addon["isNew"]);
+                if ($new_addon["isNew"] === "yes") {
                     $addon_text = ' <span class="awaiting-mod">NEW</span>';
                 }
             }
@@ -170,31 +169,57 @@ function hdq_create_settings_page()
 
     if (HDQ_PLUGIN_VERSION != $hdq_version) {
         update_option('HDQ_PLUGIN_VERSION', HDQ_PLUGIN_VERSION);
-
-        // start new addon cron. Runs once a day
-        wp_schedule_event(time() + 30, "daily", "hdq_check_for_updates");
+        delete_option("hdq_new_addon");
+        delete_transient("hdq_new_addon");
+        wp_clear_scheduled_hook('hdq_addon_styler_check_for_updates');
+        wp_clear_scheduled_hook('hdq_check_for_updates');
     }
 }
 add_action('init', 'hdq_create_settings_page');
 
 function hdq_check_for_updates()
 {
-    $data = get_option("hdq_new_addon");
-    if ($data != null && $data != "" && is_array($data)) {
-        $data = array_map("sanitize_text_field", $data);
-    } else {
-        $data = array("", "");
-    }
-
-    $remote = wp_remote_get("https://raw.githubusercontent.com/Cicini/Encrypted-HDQuiz/main/addons.txt");
+    $remote = wp_remote_get("https://hdplugins.com/plugins/hd-quiz/addons_updated.txt");
+    $local = intval(get_option("hdq_new_addon"));
     if (is_array($remote)) {
-        $remote = sanitize_text_field($remote["body"]);
-        if ($remote > $data[1]) {
-            update_option("hdq_new_addon", array("yes", $remote));
+        $remote = intval($remote["body"]);
+        update_option("hdq_new_addon", $remote);
+
+        $transient = array(
+            "date" => $remote,
+            "isNew" => ""
+        );
+
+        if ($remote > $local) {
+            $transient["isNew"] = "yes";
         }
+
+        set_transient("hdq_new_addon", $transient, WEEK_IN_SECONDS); // only check every week
+
+    } else {
+        update_option("hdq_new_addon", "");
+        set_transient("hdq_new_addon", array("date" => 0, "isNew" => ""), DAY_IN_SECONDS); // unable to connect. try again tomorrow
     }
 }
-add_action('hdq_check_for_updates', 'hdq_check_for_updates', 10, 0);
+
+function hddq_plugin_links($actions, $plugin_file, $plugin_data, $context)
+{
+    $new = array(
+        'settings'    => sprintf(
+            '<a href="%s">%s</a>',
+            esc_url(admin_url('admin.php?page=hdq_options')),
+            esc_html__('Settings', 'hdquiz')
+        ),
+        'help' => sprintf(
+            '<a href="%s">%s</a>',
+            'https://hdplugins.com/forum/hd-quiz-support/',
+            esc_html__('Help', 'hdquiz')
+        )
+    );
+    return array_merge($new, $actions);
+}
+add_filter("plugin_action_links_" . plugin_basename(__FILE__), 'hddq_plugin_links', 10, 4);
+
 
 function hdq_deactivation()
 {
@@ -275,6 +300,7 @@ function hdq_validate_answers()
 }
 add_action('wp_ajax_hdq_validate_answers', 'hdq_validate_answers');
 add_action('wp_ajax_nopriv_hdq_validate_answers', 'hdq_validate_answers');
+
 function hdq_get_result_text()
 {
 	$quiz_ID = intval($_POST["data"]["quiz_ID"]);

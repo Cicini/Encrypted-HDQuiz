@@ -549,7 +549,7 @@ function hdq_get_quiz_meta()
 		{
 			"type": "content",
 			"name": "timer_content_descriptor",
-			"value": "<p>If the timer is enabled,the quiz will be hidden behind a \"START QUIZ\" button. You can rename this button from the HD Quiz -> About / Options page</p>"
+			"value": "<p>If the timer is enabled, the quiz will be hidden behind a \"START QUIZ\" button. You can rename this button from the HD Quiz -> About / Options page</p>"
 		},
 		{
 			"type": "col-1-1",
@@ -1013,7 +1013,13 @@ function hdq_print_answers_admin($tab, $tab_slug, $fields)
 		</thead>
 		<tbody>
 			<?php
-			for ($x = 1; $x < 11; $x++) {
+	
+			$hdq_max_answers = 10;
+			if(defined('HDQ_MAX_ANSWERS')){
+				$hdq_max_answers = intval(HDQ_MAX_ANSWERS);
+			}	
+	
+			for ($x = 1; $x < $hdq_max_answers + 1; $x++) {
 				$v = "";
 				if (isset($answers[$x - 1])) {
 					$v = $answers[$x - 1]["answer"];

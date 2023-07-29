@@ -30,6 +30,6 @@
 	<div class = "hdq_answers">
 		<div class = "hdq_row">
 			<label for = "hdq_option_<?php echo $question_ID; ?>" class = "hdq_aria_label"><?php echo $hint_text; ?></label>
-			<input id="hdq_option_<?php echo $question_ID; ?>" autocomplete="off" data-id = "<?php echo htmlentities($question["question_id"]["value"]); ?>" class = "hdq_label_answer hdq_input hdq_option" data-answers = "<?php echo htmlentities($correct); ?>" data-type = "text" type = "text" title = "<?php echo htmlentities($hint_text); ?>" placeholder = "<?php echo htmlentities($hint_text); ?>"/>
+			<input id="hdq_option_<?php echo $question_ID; ?>" autocomplete="off" data-id = "<?php echo htmlentities($question["question_id"]["value"]); ?>" class = "hdq_label_answer hdq_input hdq_option" data-answers = "<?php echo htmlentities($correct); ?>" data-type = "text" type = "text" title = "<?php echo htmlentities($hint_text); ?>" placeholder = "<?php echo htmlentities($hint_text); ?>" enterkeyhint="done"/>
 		</div>
 	</div>

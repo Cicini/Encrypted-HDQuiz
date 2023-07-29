@@ -10,10 +10,10 @@ if (hdq_user_permission()) {
         wp_enqueue_style(
             'hdq_admin_style',
             plugin_dir_url(__FILE__) . 'css/hdq_admin.css',
-			array(),
-			HDQ_PLUGIN_VERSION
+            array(),
+            HDQ_PLUGIN_VERSION
         );
-        
+
         wp_enqueue_script(
             'hdq_admin_script',
             plugins_url('/js/hdq_admin.js', __FILE__),
@@ -21,9 +21,9 @@ if (hdq_user_permission()) {
             HDQ_PLUGIN_VERSION,
             true
         );
-        
+
         wp_enqueue_media();
-        
+
         do_action("hdq_global_enqueue"); // enqueue files that need to be on every page
         do_action("hdq_settings_enqueue"); // enqueue files that only need to be on the settings page
     }

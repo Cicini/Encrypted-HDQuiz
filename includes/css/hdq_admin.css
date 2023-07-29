@@ -7,7 +7,7 @@
 }
 
 #main {
-	font-size: 22px;
+	font-size: 18px;
 	margin: 0 auto;
 	max-width: 1200px;
 	padding: 4rem;
@@ -34,9 +34,8 @@
 }
 
 .hdq_button_warning {
-	font-size: 16px;
-	display: inline-block;
-	padding: 12px 14px;
+	font-size: 14px;
+	padding: 0.6em 1em;
 	background: #ff6666;
 	color: #fff;
 	margin: 12px 8px;
@@ -44,6 +43,8 @@
 	border: 1px solid #444;
 	text-decoration: none;
 	font-weight: bolder;
+	display: flex;
+	align-items: center;
 }
 
 .hdq_button_warning .dashicons {
@@ -119,16 +120,16 @@
 }
 
 #hdq_footer_highlight_wrapper {
-    font-size: 22px;   
-    margin: -4rem auto 0 auto;
-    max-width: 1200px;
-    padding: 0 4rem;
-    color: #4a4a4a;
-    font-family: sans-serif;
-    border: none;
+	font-size: 22px;
+	margin: -4rem auto 0 auto;
+	max-width: 1200px;
+	padding: 0 4rem;
+	color: #4a4a4a;
+	font-family: sans-serif;
+	border: none;
 }
 #hdq_footer_highlight_wrapper p {
-	font-size: 22px;
+	font-size: 18px;
 }
 
 #hd_patreon_icon > img {
@@ -152,6 +153,7 @@
 	grid-column-gap: 4rem;
 	place-items: center;
 	margin-top: 4rem;
+	border: 1px solid #ddd;
 }
 
 .hdq_quiz_item {
@@ -216,8 +218,8 @@
 .hdq_quiz_tab {
 	padding: 1rem;
 	border: 1px solid #222;
-	background: #5f666d;
-	color: #fff;
+	background: #dcdcdc;
+	color: #000;
 	cursor: pointer;
 }
 
@@ -231,8 +233,16 @@
 	color: #000;
 }
 
-.hdq_quiz_tab:hover {
-	background: #222;
+.hdq_quiz_tab:first-child {
+	border-top-left-radius: 12px;
+}
+
+.hdq_quiz_tab:last-child {
+	border-top-right-radius: 12px;
+}
+
+.hdq_quiz_tab:not(.hdq_quiz_tab_active):hover {
+	background: #e3e3e3;
 }
 
 #hdq_quiz_tabs_content {
@@ -261,7 +271,7 @@
 }
 
 #main p {
-	font-size: 0.7em;
+	font-size: 1em;
 }
 
 .tab_nav_item {
@@ -273,7 +283,7 @@
 }
 
 .tab_nav_item.tab_nav_item_active:first-child {
-	border-top: 1px solid #8c8c8c;
+	border-top: 1px solid #5f666d;
 }
 
 .tab_nav_item:hover {
@@ -344,6 +354,24 @@
 	grid-template-columns: 1fr max-content;
 }
 
+#hdq_question_edit_left {
+	align-self: center;
+	display: flex;
+}
+
+#hdq_question_edit_left > div {
+	margin-right: 1em;
+}
+
+#hdq_question_edit_right {
+	align-self: center;
+	display: flex;
+}
+
+#hdq_delete_question {
+	margin: 0 1em 0 0;
+}
+
 #save {
 	margin-right: 0;
 }
@@ -363,7 +391,7 @@
 	font-weight: bold;
 	cursor: pointer;
 	margin-bottom: 0.4em;
-	font-size: 0.8em;
+	font-size: 1em;
 	line-height: 1.4;
 }
 
@@ -372,7 +400,7 @@
 	width: 100%;
 	padding: 0.4em;
 	border: 1px solid #ddd;
-	font-size: 0.8em;
+	font-size: 1em;
 	border-radius: 0.2em;
 	line-height: 1;
 	background-color: #fff;
@@ -387,6 +415,10 @@
 
 #main .hdq_input_required {
 	border: 1px solid firebrick !important;
+}
+
+#main .hdq_input_item p {
+	font-size: 0.8em;
 }
 
 .input_has_prefix {
@@ -837,7 +869,7 @@
 #hdq_logo {
 	text-align: center;
 	padding: 1rem;
-	background: #5f666d;
+	background: #151d22;
 }
 
 .hdq_logo_tooltip {
@@ -978,8 +1010,10 @@
 	color: #000;
 	font-weight: bold;
 	cursor: pointer;
-	padding: 1rem;
-	display: inline-block;
+	padding: 0.6em 1em;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
 	line-height: 1;
 	border: 1px solid #222;
 }
@@ -999,10 +1033,12 @@ a.hdq_button2:hover {
 	color: #000;
 	font-weight: bold;
 	cursor: pointer;
-	padding: 1rem;
-	display: inline-block;
 	line-height: 1;
 	border: 1px solid #222;
+	padding: 0.6em 1em;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
 }
 
 .hdq_button.saving,
@@ -1070,6 +1106,13 @@ a.hdq_button2:hover {
 	margin-bottom: 2rem;
 	padding: 1rem;
 	background: #fff;
+}
+
+.hdq_addon_item .hdq_button,
+.hdq_addon_item .hdq_button2,
+.hd-quiz_page_hdq_options .hdq_button,
+.hd-quiz_page_hdq_options .hdq_button2{
+	display: inline-block;
 }
 
 .hdq_addon_item h2 {
@@ -1258,3 +1301,4 @@ span.hdq_price {
 	font-family: monospace;
 	margin: 1rem 0;
 }
+

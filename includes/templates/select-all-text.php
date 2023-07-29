@@ -19,7 +19,7 @@
         if ($answers[$i]["answer"] != "" && $answers[$i]["answer"] != null) {
             $selected = 0;
             if ($answers[$i]["correct"]) {
-                $selected = 0;
+                $selected = 1;
             } ?>
 			<div class = "hdq_row">
 				<label class="hdq_label_answer" id = "hda_label_<?php echo $i . '_' . $question_ID; ?>" data-type = "radio" data-id = "hdq_question_<?php echo $question_ID; ?>" for="hdq_option_<?php echo $i . '_' . $question_ID; ?>">
