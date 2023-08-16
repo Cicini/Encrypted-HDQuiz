@@ -523,6 +523,8 @@ function hdq_get_results($quiz_settings)
             <div class="hdq_result"><?php if ($results_percent == "yes") {
                                         echo ' - <span class = "hdq_result_percent"></span>';
                                     } ?></div>
+            <div class="hdq_result_pass"></div>
+            <div class="hdq_result_fail"></div>
             <?php
             if ($share_results === "yes") {
             ?>
