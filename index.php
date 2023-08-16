@@ -5,7 +5,7 @@
     * Plugin URI: https://github.com/cicini/encrypted-hdquiz
     * Author: Cicini (Original Version: Harmonic Design)
     * Author URI: https://github.com/cicini
-    * Version: 2023.07.29
+    * Version: 2023.08.16
 */
 
 if (!defined('ABSPATH')) {
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('HDQ_PLUGIN_VERSION')) {
-    define('HDQ_PLUGIN_VERSION', '2023.07.29');
+    define('HDQ_PLUGIN_VERSION', '2023.08.16');
 }
 
 // custom quiz image sizes
